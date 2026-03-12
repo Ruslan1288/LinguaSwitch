@@ -32,6 +32,10 @@ cp -r "$BUILD_DIR/GRDB_GRDB.bundle" "$APP_BUNDLE/"
 # Remove ru_words.txt from resource bundle (not needed)
 rm -f "$APP_BUNDLE/LayoutSwitcher_LayoutSwitcher.bundle/ru_words.txt"
 
+echo "▶ Fixing permissions..."
+chmod -R a+rX "$APP_BUNDLE"
+chmod +x "$CONTENTS/MacOS/$APP_NAME"
+
 echo "▶ Ad-hoc signing..."
 codesign --deep --force --sign - "$APP_BUNDLE"
 

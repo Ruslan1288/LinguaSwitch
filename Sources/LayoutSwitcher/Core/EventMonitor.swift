@@ -10,6 +10,9 @@ class EventMonitor {
     private var lastCompletedWord = ""
     private var lastTriggerKeyCode: Int64 = 49 // Space
 
+    /// Published so MenuBar can show active/inactive indicator
+    private(set) var isActive = false
+
     var onWord: ((String, Int64) -> Void)?
     var onAutoReplace: ((String) -> Void)?
 
@@ -22,7 +25,11 @@ class EventMonitor {
     func start() {
         tapThread = Thread { [weak self] in
             guard let self else { return }
-            let eventMask: CGEventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue)
+            let eventMask: CGEventMask =
+                (1 << CGEventType.keyDown.rawValue) |
+                (1 << CGEventType.keyUp.rawValue) |
+                (1 << CGEventType.tapDisabledByTimeout.rawValue) |
+                (1 << CGEventType.tapDisabledByUserInput.rawValue)
             let selfPtr = Unmanaged.passUnretained(self).toOpaque()
             guard let tap = CGEvent.tapCreate(
                 tap: .cgSessionEventTap,
@@ -32,7 +39,11 @@ class EventMonitor {
                 callback: eventTapCallback,
                 userInfo: selfPtr
             ) else {
-                print("Failed to create CGEventTap — accessibility permission required")
+                print("[LinguaSwitch] Failed to create CGEventTap — accessibility permission required")
+                DispatchQueue.main.async {
+                    self.isActive = false
+                    NotificationCenter.default.post(name: .eventTapStatusChanged, object: false)
+                }
                 return
             }
             self.eventTap = tap
@@ -40,6 +51,10 @@ class EventMonitor {
             self.tapRunLoop = CFRunLoopGetCurrent()
             CFRunLoopAddSource(self.tapRunLoop, self.runLoopSource, .commonModes)
             CGEvent.tapEnable(tap: tap, enable: true)
+            DispatchQueue.main.async {
+                self.isActive = true
+                NotificationCenter.default.post(name: .eventTapStatusChanged, object: true)
+            }
             CFRunLoopRun()
         }
         tapThread?.start()
@@ -48,6 +63,13 @@ class EventMonitor {
     func stop() {
         if let tap = eventTap { CGEvent.tapEnable(tap: tap, enable: false) }
         if let rl = tapRunLoop { CFRunLoopStop(rl) }
+        isActive = false
+    }
+
+    /// Called from the callback when tap was disabled by macOS — re-enable it immediately.
+    func handleTapDisabled() {
+        guard let tap = eventTap else { return }
+        CGEvent.tapEnable(tap: tap, enable: true)
     }
 
     func processKeyDown(event: CGEvent) -> Unmanaged<CGEvent>? {
@@ -114,8 +136,6 @@ class EventMonitor {
     }
 
     private func logToDiary(event: CGEvent, keyCode: Int64) {
-        // Check for secure text field - skip logging in password fields
-        // This is a best-effort check
         var length = 0
         var chars = [UniChar](repeating: 0, count: 4)
         event.keyboardGetUnicodeString(maxStringLength: 4, actualStringLength: &length, unicodeString: &chars)
@@ -130,6 +150,10 @@ class EventMonitor {
     }
 }
 
+extension Notification.Name {
+    static let eventTapStatusChanged = Notification.Name("eventTapStatusChanged")
+}
+
 private func eventTapCallback(
     proxy: CGEventTapProxy,
     type: CGEventType,
@@ -138,6 +162,13 @@ private func eventTapCallback(
 ) -> Unmanaged<CGEvent>? {
     guard let refcon else { return Unmanaged.passUnretained(event) }
     let monitor = Unmanaged<EventMonitor>.fromOpaque(refcon).takeUnretainedValue()
+
+    // macOS can disable the tap if the callback is too slow — re-enable immediately
+    if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
+        monitor.handleTapDisabled()
+        return nil
+    }
+
     if type == .keyDown {
         return monitor.processKeyDown(event: event)
     }

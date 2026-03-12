@@ -7,6 +7,13 @@ struct MenuBarContentView: View {
         let sources   = InputSourceHelper.availableInputSourceInfos()
         let currentID = InputSourceHelper.currentInputSourceID() ?? ""
 
+        if !state.eventTapActive {
+            Button("⚠️ Keyboard monitoring inactive — click to fix") {
+                AccessibilityHelper.openAccessibilitySettings()
+            }
+            Divider()
+        }
+
         ForEach(sources) { info in
             Button(info.id == currentID ? "✓  \(info.name)" : "    \(info.name)") {
                 InputSourceHelper.selectInputSource(id: info.id)
