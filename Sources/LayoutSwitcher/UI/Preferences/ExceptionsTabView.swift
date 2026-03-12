@@ -6,55 +6,137 @@ struct ExceptionsTabView: View {
     @State private var newWord = ""
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Word Exceptions")
-                .font(.headline)
-            Text("Words that will never be auto-switched.")
-                .font(.caption)
-                .foregroundColor(.secondary)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                PageTitle(title: "Exceptions")
 
-            HStack {
-                TextField("Add word...", text: $newWord)
-                    .onSubmit { addWord() }
-                Button("Add") { addWord() }
-            }
+                SectionLabel(title: "Word Exceptions")
+                Text("These words will never trigger auto-switching.")
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 8)
 
-            List {
-                ForEach(rulesManager.exceptions, id: \.self) { word in
-                    Text(word)
-                }
-                .onDelete { offsets in rulesManager.remove(at: offsets) }
-            }
-            .frame(height: 100)
-
-            Divider().padding(.vertical, 8)
-
-            Text("Excluded Apps")
-                .font(.headline)
-            Text("LayoutSwitcher is disabled in these apps.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-
-            List {
-                ForEach(settings.excludedApps) { app in
-                    HStack {
-                        if let data = app.iconData, let img = NSImage(data: data) {
-                            Image(nsImage: img).resizable().frame(width: 20, height: 20)
+                // Add word row
+                PrefsGroupBox {
+                    HStack(spacing: 10) {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundColor(.accentColor)
+                            .frame(width: DS.iconSize)
+                        TextField("Add word…", text: $newWord)
+                            .textFieldStyle(.plain)
+                            .font(.system(size: 13))
+                            .onSubmit { addWord() }
+                        if !newWord.isEmpty {
+                            Button {
+                                addWord()
+                            } label: {
+                                Text("Add")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(.accentColor)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        Text(app.name)
-                        Spacer()
-                        Text(app.bundleID).font(.caption).foregroundColor(.secondary)
+                    }
+                    .padding(.horizontal, DS.rowPadH)
+                    .padding(.vertical, DS.rowPadV)
+                }
+
+                if !rulesManager.exceptions.isEmpty {
+                    PrefsGroupBox {
+                        ForEach(Array(rulesManager.exceptions.enumerated()), id: \.element) { idx, word in
+                            HStack(spacing: 12) {
+                                Image(systemName: "text.word.spacing")
+                                    .foregroundColor(.secondary)
+                                    .frame(width: DS.iconSize)
+                                Text(word)
+                                    .font(.system(size: 13))
+                                Spacer()
+                                Button {
+                                    rulesManager.remove(at: IndexSet(integer: idx))
+                                } label: {
+                                    Image(systemName: "minus.circle.fill")
+                                        .foregroundColor(.red.opacity(0.7))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .padding(.horizontal, DS.rowPadH)
+                            .padding(.vertical, DS.rowPadV)
+                            if idx < rulesManager.exceptions.count - 1 {
+                                InsetDivider()
+                            }
+                        }
+                    }
+                    .padding(.top, 8)
+                }
+
+                SectionLabel(title: "Excluded Apps")
+                Text("LinguaSwitch is fully disabled in these applications.")
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 8)
+
+                PrefsGroupBox {
+                    if settings.excludedApps.isEmpty {
+                        HStack(spacing: 12) {
+                            Image(systemName: "app.dashed")
+                                .foregroundColor(.secondary)
+                                .frame(width: DS.iconSize)
+                            Text("No excluded apps")
+                                .font(.system(size: 13))
+                                .foregroundColor(.secondary)
+                            Spacer()
+                        }
+                        .padding(.horizontal, DS.rowPadH)
+                        .padding(.vertical, DS.rowPadV)
+                    } else {
+                        ForEach(Array(settings.excludedApps.enumerated()), id: \.element.id) { idx, app in
+                            HStack(spacing: 12) {
+                                if let data = app.iconData, let img = NSImage(data: data) {
+                                    Image(nsImage: img)
+                                        .resizable()
+                                        .frame(width: DS.iconSize, height: DS.iconSize)
+                                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                                } else {
+                                    Image(systemName: "app.fill")
+                                        .foregroundColor(.secondary)
+                                        .frame(width: DS.iconSize)
+                                }
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text(app.name).font(.system(size: 13))
+                                    Text(app.bundleID).font(.system(size: 11)).foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Button {
+                                    settings.excludedApps.remove(atOffsets: IndexSet(integer: idx))
+                                } label: {
+                                    Image(systemName: "minus.circle.fill")
+                                        .foregroundColor(.red.opacity(0.7))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .padding(.horizontal, DS.rowPadH)
+                            .padding(.vertical, DS.rowPadV)
+                            if idx < settings.excludedApps.count - 1 {
+                                InsetDivider()
+                            }
+                        }
                     }
                 }
-                .onDelete { offsets in
-                    settings.excludedApps.remove(atOffsets: offsets)
-                }
-            }
-            .frame(height: 100)
 
-            Button("Add App...") { pickApp() }
+                Button {
+                    pickApp()
+                } label: {
+                    Label("Add App…", systemImage: "plus")
+                        .font(.system(size: 13))
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.accentColor)
+                .padding(.top, 10)
+
+                Spacer(minLength: 20)
+            }
+            .padding(20)
         }
-        .padding()
     }
 
     private func addWord() {
@@ -72,11 +154,10 @@ struct ExceptionsTabView: View {
             let bundle = Bundle(url: url)
             let bundleID = bundle?.bundleIdentifier ?? ""
             let name = bundle?.infoDictionary?["CFBundleDisplayName"] as? String
-                    ?? bundle?.infoDictionary?["CFBundleName"] as? String
-                    ?? url.deletingPathExtension().lastPathComponent
+                     ?? bundle?.infoDictionary?["CFBundleName"] as? String
+                     ?? url.deletingPathExtension().lastPathComponent
             let icon = NSWorkspace.shared.icon(forFile: url.path)
-            let iconData = icon.tiffRepresentation
-            let app = ExcludedApp(bundleID: bundleID, name: name, iconData: iconData)
+            let app = ExcludedApp(bundleID: bundleID, name: name, iconData: icon.tiffRepresentation)
             settings.excludedApps.append(app)
         }
     }

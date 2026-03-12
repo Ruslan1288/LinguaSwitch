@@ -8,23 +8,34 @@ CONTENTS="$APP_BUNDLE/Contents"
 DMG_NAME="${APP_NAME}-${VERSION}.dmg"
 DMG_STAGING="/tmp/${APP_NAME}_dmg"
 
-echo "Building release binary..."
+echo "▶ Cleaning previous build..."
+swift package clean
+
+echo "▶ Building release binary..."
 swift build -c release
 
-echo "Creating .app bundle..."
+echo "▶ Creating .app bundle..."
 rm -rf "$APP_BUNDLE"
 mkdir -p "$CONTENTS/MacOS"
 mkdir -p "$CONTENTS/Resources"
 
+# Binary
 cp "$BUILD_DIR/$BINARY_NAME" "$CONTENTS/MacOS/$APP_NAME"
-cp "Info.plist" "$CONTENTS/Info.plist"
-cp "Sources/LayoutSwitcher/Resources/en_words.txt" "$CONTENTS/Resources/"
-cp "Sources/LayoutSwitcher/Resources/uk_words.txt" "$CONTENTS/Resources/"
 
-echo "Ad-hoc signing..."
+# Info.plist
+cp "Info.plist" "$CONTENTS/Info.plist"
+
+# Resource bundles — Bundle.module looks at Bundle.main.bundleURL (= .app root)
+cp -r "$BUILD_DIR/LayoutSwitcher_LayoutSwitcher.bundle" "$APP_BUNDLE/"
+cp -r "$BUILD_DIR/GRDB_GRDB.bundle" "$APP_BUNDLE/"
+
+# Remove ru_words.txt from resource bundle (not needed)
+rm -f "$APP_BUNDLE/LayoutSwitcher_LayoutSwitcher.bundle/ru_words.txt"
+
+echo "▶ Ad-hoc signing..."
 codesign --deep --force --sign - "$APP_BUNDLE"
 
-echo "Creating .dmg..."
+echo "▶ Creating .dmg..."
 rm -rf "$DMG_STAGING"
 mkdir -p "$DMG_STAGING"
 cp -r "$APP_BUNDLE" "$DMG_STAGING/"

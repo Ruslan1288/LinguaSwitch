@@ -5,31 +5,86 @@ struct GeneralTabView: View {
     @ObservedObject var settings = AppSettings.shared
 
     var body: some View {
-        Form {
-            Section("Startup") {
-                Toggle("Launch at Login", isOn: $settings.launchAtLogin)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                PageTitle(title: "General")
+
+                SectionLabel(title: "Startup")
+                PrefsGroupBox {
+                    PrefsToggleRow(
+                        icon: "sunrise.fill", iconColor: .orange,
+                        title: "Launch at Login",
+                        subtitle: "Start LinguaSwitch automatically on login",
+                        isOn: $settings.launchAtLogin
+                    )
                     .onChange(of: settings.launchAtLogin) { val in
                         if val { try? SMAppService.mainApp.register() }
-                        else { try? SMAppService.mainApp.unregister() }
+                        else   { try? SMAppService.mainApp.unregister() }
                     }
-                Toggle("Show in Menu Bar", isOn: $settings.showInMenuBar)
-            }
-            Section("Indicator") {
-                Toggle("Show Floating Indicator", isOn: $settings.showFloatingIndicator)
-                HStack {
-                    Text("Auto-hide Delay")
-                    Slider(value: $settings.autoHideIndicatorDelay, in: 0.5...5.0, step: 0.5)
-                    Text("\(settings.autoHideIndicatorDelay, specifier: "%.1f")s")
+                    InsetDivider()
+                    PrefsToggleRow(
+                        icon: "menubar.rectangle", iconColor: .blue,
+                        title: "Show in Menu Bar",
+                        isOn: $settings.showInMenuBar
+                    )
                 }
-                Toggle("Change Color on Typo", isOn: $settings.changeIndicatorColorOnTypo)
+
+                SectionLabel(title: "Floating Indicator")
+                PrefsGroupBox {
+                    PrefsToggleRow(
+                        icon: "bubble.left.fill", iconColor: .purple,
+                        title: "Show Floating Indicator",
+                        subtitle: "Displays current layout near the cursor",
+                        isOn: $settings.showFloatingIndicator
+                    )
+                    InsetDivider()
+                    PrefsSliderRow(
+                        icon: "timer", iconColor: Color(red: 0.5, green: 0.5, blue: 0.9),
+                        title: "Auto-hide Delay",
+                        value: $settings.autoHideIndicatorDelay,
+                        range: 0.5...5.0, step: 0.5, unit: "s"
+                    )
+                    InsetDivider()
+                    PrefsToggleRow(
+                        icon: "paintpalette.fill", iconColor: .red,
+                        title: "Highlight Typos",
+                        subtitle: "Changes indicator color when a typo is detected",
+                        isOn: $settings.changeIndicatorColorOnTypo
+                    )
+                }
+
+                SectionLabel(title: "Auto-Switch")
+                PrefsGroupBox {
+                    PrefsToggleRow(
+                        icon: "arrow.left.arrow.right", iconColor: Color(red: 0.2, green: 0.78, blue: 0.55),
+                        title: "Auto-Switch Enabled",
+                        subtitle: "Automatically detects and converts mistyped words",
+                        isOn: $settings.autoSwitchEnabled
+                    )
+                    InsetDivider()
+                    PrefsToggleRow(
+                        icon: "textformat", iconColor: Color(red: 0.9, green: 0.5, blue: 0.2),
+                        title: "Fix Double Caps",
+                        subtitle: "THis → This",
+                        isOn: $settings.fixDoubleCaps
+                    )
+                    InsetDivider()
+                    PrefsToggleRow(
+                        icon: "capslock.fill", iconColor: Color(red: 0.6, green: 0.4, blue: 0.9),
+                        title: "Watch CapsLock",
+                        isOn: $settings.watchCapsLock
+                    )
+                    InsetDivider()
+                    PrefsToggleRow(
+                        icon: "rectangle.topthird.inset.filled", iconColor: .gray,
+                        title: "Show Layout in Status Bar",
+                        isOn: $settings.showLayoutInStatusBar
+                    )
+                }
+
+                Spacer(minLength: 20)
             }
-            Section("Switching") {
-                Toggle("Auto-Switch Enabled", isOn: $settings.autoSwitchEnabled)
-                Toggle("Fix Double Caps (THis → This)", isOn: $settings.fixDoubleCaps)
-                Toggle("Watch CapsLock", isOn: $settings.watchCapsLock)
-                Toggle("Show Layout in Status Bar", isOn: $settings.showLayoutInStatusBar)
-            }
+            .padding(20)
         }
-        .padding()
     }
 }
