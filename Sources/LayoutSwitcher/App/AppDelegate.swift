@@ -72,9 +72,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if AccessibilityHelper.isAccessibilityGranted() {
                 timer.invalidate()
                 self?.accessibilityTimer = nil
-                self?.startCoreServices()
+                self?.showRestartRequired()
             }
         }
+    }
+
+    private func showRestartRequired() {
+        let alert = NSAlert()
+        alert.messageText = "Restart Required"
+        alert.informativeText = "Accessibility permission was granted. LinguaSwitch needs to restart to activate keyboard monitoring."
+        alert.addButton(withTitle: "Restart Now")
+        alert.addButton(withTitle: "Later")
+        if alert.runModal() == .alertFirstButtonReturn {
+            relaunch()
+        }
+    }
+
+    private func relaunch() {
+        let url = Bundle.main.bundleURL
+        let task = Process()
+        task.launchPath = "/usr/bin/open"
+        task.arguments = [url.path]
+        task.launch()
+        NSApp.terminate(nil)
     }
 
     func applicationWillTerminate(_ notification: Notification) {
