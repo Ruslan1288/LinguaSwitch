@@ -1,4 +1,4 @@
-.PHONY: build run clean test
+.PHONY: build run clean test installer
 
 build:
 	swift build -c release
@@ -15,3 +15,6 @@ clean:
 
 test:
 	swift test
+
+installer:
+	zsh build_installer.sh
