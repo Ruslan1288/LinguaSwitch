@@ -7,7 +7,7 @@ class PermissionsViewState: ObservableObject {
     @Published var accessibilityGranted: Bool = AccessibilityHelper.isAccessibilityGranted()
     @Published var inputMonitoringGranted: Bool = AccessibilityHelper.isInputMonitoringGranted()
 
-    var allGranted: Bool { accessibilityGranted && inputMonitoringGranted }
+    var allGranted: Bool { AccessibilityHelper.allPermissionsGranted() }
 
     private var timer: Timer?
 
@@ -52,7 +52,6 @@ struct PermissionsView: View {
                 granted: state.inputMonitoringGranted,
                 action: {
                     AccessibilityHelper.requestInputMonitoring()
-                    AccessibilityHelper.requestPostEvent()
                     AccessibilityHelper.openInputMonitoringSettings()
                 }
             )

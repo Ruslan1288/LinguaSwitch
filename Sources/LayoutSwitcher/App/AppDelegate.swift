@@ -12,19 +12,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         removeQuarantineAttribute()
 
-        // Always request both permissions upfront.
-        // CGRequestListenEventAccess() triggers the TCC dialog on macOS 15/16 even when
-        // CGPreflightListenEventAccess() mistakenly returns true for an un-granted app.
-        AccessibilityHelper.requestInputMonitoring()
-        AccessibilityHelper.requestPostEvent()
-
         DiagnosticsHelper.log("Launch — AX=\(AccessibilityHelper.isAccessibilityGranted()) IM=\(AccessibilityHelper.isInputMonitoringGranted()) POST=\(AccessibilityHelper.isPostEventGranted()) macOS=\(ProcessInfo.processInfo.operatingSystemVersionString)")
 
-        if AccessibilityHelper.isAccessibilityGranted() {
+        if AccessibilityHelper.allPermissionsGranted() {
             startCoreServices()
         } else {
-            DiagnosticsHelper.log("Accessibility not granted — showing permissions wizard")
-            AccessibilityHelper.requestAccessibility()
+            DiagnosticsHelper.log("Permissions missing — showing wizard")
             PermissionsWindowManager.shared.show()
         }
 
