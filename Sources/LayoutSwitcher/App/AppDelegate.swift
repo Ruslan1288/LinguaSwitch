@@ -11,6 +11,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.shared = self
         NSApp.setActivationPolicy(.accessory)
 
+        removeQuarantineAttribute()
+
         if AccessibilityHelper.isAccessibilityGranted() {
             startCoreServices()
         } else {
@@ -85,6 +87,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.addButton(withTitle: "Later")
         if alert.runModal() == .alertFirstButtonReturn {
             relaunch()
+        }
+    }
+
+    /// Removes the com.apple.quarantine xattr that prevents CGEventTap from working
+    /// on freshly downloaded/installed apps. Safe to call even if not quarantined.
+    private func removeQuarantineAttribute() {
+        let path = Bundle.main.bundleURL.path
+        let task = Process()
+        task.launchPath = "/usr/bin/xattr"
+        task.arguments = ["-dr", "com.apple.quarantine", path]
+        try? task.run()
+    }
+
+    /// Called from menu bar when EventTap is inactive. Tries to restart monitoring
+    /// without a full app relaunch. Falls back to relaunch if tap creation fails again.
+    func retryEventTap() {
+        eventMonitor?.stop()
+        eventMonitor = nil
+        // Give the old tap thread a moment to exit
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.startCoreServices()
         }
     }
 

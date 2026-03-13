@@ -1,11 +1,17 @@
 import CoreGraphics
 import AppKit
+import os
 
 class LayoutSwitcherCore {
     static let shared = LayoutSwitcherCore()
 
     /// Set to true while posting synthetic events so EventMonitor ignores them.
-    static var isSynthesizing = false
+    /// Accessed from both main thread and CGEventTap thread — protected by a lock.
+    private static let synthesizingLock = OSAllocatedUnfairLock(initialState: false)
+    static var isSynthesizing: Bool {
+        get { synthesizingLock.withLockUnchecked { $0 } }
+        set { synthesizingLock.withLockUnchecked { $0 = newValue } }
+    }
 
     private let source = CGEventSource(stateID: .hidSystemState)
 
