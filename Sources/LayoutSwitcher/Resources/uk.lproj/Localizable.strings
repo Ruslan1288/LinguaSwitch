@@ -80,6 +80,18 @@
 "about.label_platform" = "Платформа";
 "about.value_platform" = "macOS 13+";
 
+/* Permissions Wizard */
+"permissions.title" = "Потрібні дозволи";
+"permissions.subtitle" = "LinguaSwitch потребує два дозволи для роботи.";
+"permissions.accessibility.title" = "Accessibility";
+"permissions.accessibility.description" = "Дозволяє LinguaSwitch перемикати розкладки клавіатури у всій системі.";
+"permissions.input_monitoring.title" = "Input Monitoring";
+"permissions.input_monitoring.description" = "Дозволяє LinguaSwitch перехоплювати натискання клавіш для авто-перемикання.";
+"permissions.open_settings" = "Відкрити налаштування…";
+"permissions.all_granted" = "Усі дозволи надано";
+"permissions.restart" = "Перезапустити LinguaSwitch";
+"permissions.hint" = "Після надання обох дозволів натисніть «Перезапустити LinguaSwitch».";
+
 /* Alerts */
 "alert.accessibility_title" = "Потрібен дозвіл Accessibility";
 "alert.accessibility_body" = "LinguaSwitch потребує доступу Accessibility для моніторингу та перемикання розкладок клавіатури. Будь ласка, надайте дозвіл у Системних налаштуваннях → Конфіденційність і безпека → Accessibility.";

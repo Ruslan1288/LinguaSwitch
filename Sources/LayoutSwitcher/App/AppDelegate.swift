@@ -5,7 +5,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     static var shared: AppDelegate?
 
     var eventMonitor: EventMonitor?
-    private var permissionsTimer: Timer?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         AppDelegate.shared = self
@@ -24,10 +23,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if AccessibilityHelper.isAccessibilityGranted() {
             startCoreServices()
         } else {
-            DiagnosticsHelper.log("Accessibility not granted — showing onboarding")
+            DiagnosticsHelper.log("Accessibility not granted — showing permissions wizard")
             AccessibilityHelper.requestAccessibility()
-            showPermissionsOnboarding()
-            startPermissionsPolling()
+            PermissionsWindowManager.shared.show()
         }
 
         // Launch at login
@@ -67,42 +65,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func showPermissionsOnboarding() {
-        let alert = NSAlert()
-        alert.messageText = L("alert.permissions_title")
-        alert.informativeText = L("alert.permissions_body")
-        alert.addButton(withTitle: L("alert.open_accessibility"))
-        alert.addButton(withTitle: L("alert.later"))
-        if alert.runModal() == .alertFirstButtonReturn {
-            if !AccessibilityHelper.isAccessibilityGranted() {
-                AccessibilityHelper.openAccessibilitySettings()
-            } else {
-                AccessibilityHelper.openInputMonitoringSettings()
-            }
-        }
-    }
-
-    private func startPermissionsPolling() {
-        permissionsTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] timer in
-            if AccessibilityHelper.allPermissionsGranted() {
-                timer.invalidate()
-                self?.permissionsTimer = nil
-                self?.showRestartRequired()
-            }
-        }
-    }
-
-    private func showRestartRequired() {
-        let alert = NSAlert()
-        alert.messageText = L("alert.restart_title")
-        alert.informativeText = L("alert.restart_body")
-        alert.addButton(withTitle: L("alert.restart_now"))
-        alert.addButton(withTitle: L("alert.later"))
-        if alert.runModal() == .alertFirstButtonReturn {
-            relaunch()
-        }
-    }
-
     /// Removes the com.apple.quarantine xattr that prevents CGEventTap from working
     /// on freshly downloaded/installed apps. Safe to call even if not quarantined.
     private func removeQuarantineAttribute() {
@@ -124,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func relaunch() {
+    func relaunch() {
         let url = Bundle.main.bundleURL
         let task = Process()
         task.launchPath = "/usr/bin/open"

@@ -80,6 +80,18 @@
 "about.label_platform" = "Platform";
 "about.value_platform" = "macOS 13+";
 
+/* Permissions Wizard */
+"permissions.title" = "Permissions Required";
+"permissions.subtitle" = "LinguaSwitch needs two permissions to function.";
+"permissions.accessibility.title" = "Accessibility";
+"permissions.accessibility.description" = "Allows LinguaSwitch to switch keyboard layouts system-wide.";
+"permissions.input_monitoring.title" = "Input Monitoring";
+"permissions.input_monitoring.description" = "Allows LinguaSwitch to intercept keystrokes for auto-switching.";
+"permissions.open_settings" = "Open Settings…";
+"permissions.all_granted" = "All permissions granted";
+"permissions.restart" = "Restart LinguaSwitch";
+"permissions.hint" = "After granting both permissions, click Restart LinguaSwitch.";
+
 /* Alerts */
 "alert.accessibility_title" = "Accessibility Permission Required";
 "alert.accessibility_body" = "LinguaSwitch needs Accessibility access to monitor and switch keyboard layouts system-wide. Please grant permission in System Settings → Privacy & Security → Accessibility.";
