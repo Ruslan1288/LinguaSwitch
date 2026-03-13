@@ -30,6 +30,14 @@ class EventMonitor {
                 (1 << CGEventType.keyUp.rawValue) |
                 (1 << CGEventType.tapDisabledByTimeout.rawValue) |
                 (1 << CGEventType.tapDisabledByUserInput.rawValue)
+            guard CGPreflightListenEventAccess() else {
+                print("[LinguaSwitch] Input Monitoring not granted")
+                DispatchQueue.main.async {
+                    self.isActive = false
+                    NotificationCenter.default.post(name: .eventTapStatusChanged, object: false)
+                }
+                return
+            }
             let selfPtr = Unmanaged.passUnretained(self).toOpaque()
             guard let tap = CGEvent.tapCreate(
                 tap: .cgSessionEventTap,

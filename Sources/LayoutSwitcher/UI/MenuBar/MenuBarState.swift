@@ -1,11 +1,13 @@
 import Foundation
 import Combine
+import CoreGraphics
 
 class MenuBarState: ObservableObject {
     @Published var layoutName: String = ""
     @Published var autoSwitchEnabled: Bool
     @Published var soundEnabled: Bool
     @Published var eventTapActive: Bool = true
+    @Published var inputMonitoringGranted: Bool = CGPreflightListenEventAccess()
 
     private var cancellables = Set<AnyCancellable>()
     private var inputSourceObserver: Any?
@@ -48,6 +50,7 @@ class MenuBarState: ObservableObject {
             queue: .main
         ) { [weak self] note in
             self?.eventTapActive = (note.object as? Bool) ?? false
+            self?.inputMonitoringGranted = CGPreflightListenEventAccess()
         }
     }
 

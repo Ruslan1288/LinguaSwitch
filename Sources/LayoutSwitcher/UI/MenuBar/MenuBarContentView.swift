@@ -8,13 +8,17 @@ struct MenuBarContentView: View {
         let currentID = InputSourceHelper.currentInputSourceID() ?? ""
 
         if !state.eventTapActive {
-            if AccessibilityHelper.isAccessibilityGranted() {
-                Button(L("menu.monitoring_inactive_retry")) {
-                    AppDelegate.shared?.retryEventTap()
-                }
-            } else {
+            if !AccessibilityHelper.isAccessibilityGranted() {
                 Button(L("menu.grant_accessibility")) {
                     AccessibilityHelper.openAccessibilitySettings()
+                }
+            } else if !AccessibilityHelper.isInputMonitoringGranted() {
+                Button(L("menu.grant_input_monitoring")) {
+                    AccessibilityHelper.openInputMonitoringSettings()
+                }
+            } else {
+                Button(L("menu.monitoring_inactive_retry")) {
+                    AppDelegate.shared?.retryEventTap()
                 }
             }
             Divider()

@@ -5,7 +5,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     static var shared: AppDelegate?
 
     var eventMonitor: EventMonitor?
-    private var accessibilityTimer: Timer?
+    private var permissionsTimer: Timer?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         AppDelegate.shared = self
@@ -13,12 +13,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         removeQuarantineAttribute()
 
-        if AccessibilityHelper.isAccessibilityGranted() {
+        if AccessibilityHelper.allPermissionsGranted() {
             startCoreServices()
         } else {
-            AccessibilityHelper.requestAccessibility()
-            showOnboarding()
-            startAccessibilityPolling()
+            if !AccessibilityHelper.isAccessibilityGranted() {
+                AccessibilityHelper.requestAccessibility()
+            }
+            if !AccessibilityHelper.isInputMonitoringGranted() {
+                AccessibilityHelper.requestInputMonitoring()
+            }
+            showPermissionsOnboarding()
+            startPermissionsPolling()
         }
 
         // Launch at login
@@ -58,22 +63,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func showOnboarding() {
+    private func showPermissionsOnboarding() {
         let alert = NSAlert()
-        alert.messageText = L("alert.accessibility_title")
-        alert.informativeText = L("alert.accessibility_body")
+        alert.messageText = L("alert.permissions_title")
+        alert.informativeText = L("alert.permissions_body")
         alert.addButton(withTitle: L("alert.open_accessibility"))
         alert.addButton(withTitle: L("alert.later"))
         if alert.runModal() == .alertFirstButtonReturn {
-            AccessibilityHelper.openAccessibilitySettings()
+            if !AccessibilityHelper.isAccessibilityGranted() {
+                AccessibilityHelper.openAccessibilitySettings()
+            } else {
+                AccessibilityHelper.openInputMonitoringSettings()
+            }
         }
     }
 
-    private func startAccessibilityPolling() {
-        accessibilityTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] timer in
-            if AccessibilityHelper.isAccessibilityGranted() {
+    private func startPermissionsPolling() {
+        permissionsTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] timer in
+            if AccessibilityHelper.allPermissionsGranted() {
                 timer.invalidate()
-                self?.accessibilityTimer = nil
+                self?.permissionsTimer = nil
                 self?.showRestartRequired()
             }
         }

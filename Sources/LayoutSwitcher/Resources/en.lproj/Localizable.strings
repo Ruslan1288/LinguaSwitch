@@ -1,6 +1,7 @@
 /* Menu Bar */
 "menu.monitoring_inactive_retry" = "⚠️ Monitoring inactive — click to retry";
 "menu.grant_accessibility" = "⚠️ Grant Accessibility permission to activate";
+"menu.grant_input_monitoring" = "⚠️ Grant Input Monitoring permission to activate";
 "menu.auto_switch" = "Auto-Switch";
 "menu.sound_effects" = "Sound Effects";
 "menu.preferences" = "Preferences...";
@@ -81,8 +82,12 @@
 /* Alerts */
 "alert.accessibility_title" = "Accessibility Permission Required";
 "alert.accessibility_body" = "LinguaSwitch needs Accessibility access to monitor and switch keyboard layouts system-wide. Please grant permission in System Settings → Privacy & Security → Accessibility.";
-"alert.open_accessibility" = "Open Accessibility Settings";
+"alert.open_accessibility" = "Open Settings";
 "alert.later" = "Later";
 "alert.restart_title" = "Restart Required";
-"alert.restart_body" = "Accessibility permission was granted. LinguaSwitch needs to restart to activate keyboard monitoring.";
+"alert.restart_body" = "Permissions were granted. LinguaSwitch needs to restart to activate keyboard monitoring.";
 "alert.restart_now" = "Restart Now";
+"alert.input_monitoring_title" = "Input Monitoring Permission Required";
+"alert.input_monitoring_body" = "LinguaSwitch needs Input Monitoring access to intercept keystrokes for layout auto-switching. Please grant permission in System Settings → Privacy & Security → Input Monitoring.";
+"alert.permissions_title" = "Permissions Required";
+"alert.permissions_body" = "LinguaSwitch needs two permissions to function:\n\n• Accessibility — to switch keyboard layouts system-wide\n• Input Monitoring — to intercept keystrokes for auto-switching\n\nPlease grant both in System Settings → Privacy & Security.";

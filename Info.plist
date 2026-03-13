@@ -26,5 +26,7 @@
     <string>13.0</string>
     <key>NSAccessibilityUsageDescription</key>
     <string>LinguaSwitch needs Accessibility access to detect and switch keyboard layouts automatically.</string>
+    <key>NSInputMonitoringUsageDescription</key>
+    <string>LinguaSwitch needs Input Monitoring to intercept keystrokes for layout auto-switching.</string>
 </dict>
 </plist>
