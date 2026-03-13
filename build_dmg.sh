@@ -1,7 +1,7 @@
 #!/bin/zsh
 BINARY_NAME="LayoutSwitcher"
 APP_NAME="LinguaSwitch"
-VERSION="0.5.0"
+VERSION="0.5.1"
 BUILD_DIR=".build/release"
 APP_BUNDLE="$BUILD_DIR/$APP_NAME.app"
 CONTENTS="$APP_BUNDLE/Contents"
