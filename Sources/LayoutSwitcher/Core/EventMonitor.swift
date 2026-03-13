@@ -12,6 +12,9 @@ class EventMonitor {
 
     /// Published so MenuBar can show active/inactive indicator
     private(set) var isActive = false
+    /// Set to true when the first real keyDown arrives — proves tap is actually receiving events.
+    private var firstEventReceived = false
+    private var heartbeatTimer: Timer?
 
     var onWord: ((String, Int64) -> Void)?
     var onAutoReplace: ((String) -> Void)?
@@ -62,6 +65,7 @@ class EventMonitor {
             DispatchQueue.main.async {
                 self.isActive = true
                 NotificationCenter.default.post(name: .eventTapStatusChanged, object: true)
+                self.scheduleHeartbeat()
             }
             CFRunLoopRun()
         }
@@ -69,9 +73,22 @@ class EventMonitor {
     }
 
     func stop() {
+        heartbeatTimer?.invalidate()
+        heartbeatTimer = nil
         if let tap = eventTap { CGEvent.tapEnable(tap: tap, enable: false) }
         if let rl = tapRunLoop { CFRunLoopStop(rl) }
         isActive = false
+    }
+
+    /// After 8s, if no keyDown was received the tap is silently blocked (e.g. Input Monitoring
+    /// not granted on macOS 15+). Mark inactive so the menu bar shows the warning.
+    private func scheduleHeartbeat() {
+        heartbeatTimer = Timer.scheduledTimer(withTimeInterval: 8.0, repeats: false) { [weak self] _ in
+            guard let self, self.isActive, !self.firstEventReceived else { return }
+            print("[LinguaSwitch] Heartbeat: tap active but no events received — Input Monitoring likely blocked")
+            self.isActive = false
+            NotificationCenter.default.post(name: .eventTapStatusChanged, object: false)
+        }
     }
 
     /// Called from the callback when tap was disabled by macOS — re-enable it immediately.
@@ -81,6 +98,11 @@ class EventMonitor {
     }
 
     func processKeyDown(event: CGEvent) -> Unmanaged<CGEvent>? {
+        if !firstEventReceived {
+            firstEventReceived = true
+            heartbeatTimer?.invalidate()
+            heartbeatTimer = nil
+        }
         // Ignore synthetic events posted by replaceWord/typeString
         if LayoutSwitcherCore.isSynthesizing { return Unmanaged.passUnretained(event) }
 
