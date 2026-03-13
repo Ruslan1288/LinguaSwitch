@@ -60,10 +60,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func showOnboarding() {
         let alert = NSAlert()
-        alert.messageText = "Accessibility Permission Required"
-        alert.informativeText = "LayoutSwitcher needs Accessibility access to monitor and switch keyboard layouts system-wide. Please grant permission in System Settings → Privacy & Security → Accessibility."
-        alert.addButton(withTitle: "Open Accessibility Settings")
-        alert.addButton(withTitle: "Later")
+        alert.messageText = L("alert.accessibility_title")
+        alert.informativeText = L("alert.accessibility_body")
+        alert.addButton(withTitle: L("alert.open_accessibility"))
+        alert.addButton(withTitle: L("alert.later"))
         if alert.runModal() == .alertFirstButtonReturn {
             AccessibilityHelper.openAccessibilitySettings()
         }
@@ -81,10 +81,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func showRestartRequired() {
         let alert = NSAlert()
-        alert.messageText = "Restart Required"
-        alert.informativeText = "Accessibility permission was granted. LinguaSwitch needs to restart to activate keyboard monitoring."
-        alert.addButton(withTitle: "Restart Now")
-        alert.addButton(withTitle: "Later")
+        alert.messageText = L("alert.restart_title")
+        alert.informativeText = L("alert.restart_body")
+        alert.addButton(withTitle: L("alert.restart_now"))
+        alert.addButton(withTitle: L("alert.later"))
         if alert.runModal() == .alertFirstButtonReturn {
             relaunch()
         }

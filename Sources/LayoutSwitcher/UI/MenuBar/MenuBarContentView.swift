@@ -9,13 +9,11 @@ struct MenuBarContentView: View {
 
         if !state.eventTapActive {
             if AccessibilityHelper.isAccessibilityGranted() {
-                // Accessibility is granted but tap still failed (quarantine or other issue).
-                // Retry creating the tap — quarantine was removed on launch so this usually works.
-                Button("⚠️ Monitoring inactive — click to retry") {
+                Button(L("menu.monitoring_inactive_retry")) {
                     AppDelegate.shared?.retryEventTap()
                 }
             } else {
-                Button("⚠️ Grant Accessibility permission to activate") {
+                Button(L("menu.grant_accessibility")) {
                     AccessibilityHelper.openAccessibilitySettings()
                 }
             }
@@ -30,17 +28,17 @@ struct MenuBarContentView: View {
 
         Divider()
 
-        Toggle("Auto-Switch", isOn: $state.autoSwitchEnabled)
-        Toggle("Sound Effects", isOn: $state.soundEnabled)
+        Toggle(L("menu.auto_switch"), isOn: $state.autoSwitchEnabled)
+        Toggle(L("menu.sound_effects"), isOn: $state.soundEnabled)
 
         Divider()
 
-        Button("Preferences...") {
+        Button(L("menu.preferences")) {
             PreferencesWindowManager.shared.show()
         }
         .keyboardShortcut(",", modifiers: .command)
 
-        Button("Quit") {
+        Button(L("menu.quit")) {
             NSApp.terminate(nil)
         }
         .keyboardShortcut("q", modifiers: .command)

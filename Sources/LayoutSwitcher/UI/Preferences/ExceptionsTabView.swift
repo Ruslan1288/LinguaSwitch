@@ -8,21 +8,20 @@ struct ExceptionsTabView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                PageTitle(title: "Exceptions")
+                PageTitle(title: L("exceptions.title"))
 
-                SectionLabel(title: "Word Exceptions")
-                Text("These words will never trigger auto-switching.")
+                SectionLabel(title: L("exceptions.word_exceptions"))
+                Text(L("exceptions.word_exceptions_sub"))
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
                     .padding(.bottom, 8)
 
-                // Add word row
                 PrefsGroupBox {
                     HStack(spacing: 10) {
                         Image(systemName: "plus.circle.fill")
                             .foregroundColor(.accentColor)
                             .frame(width: DS.iconSize)
-                        TextField("Add word…", text: $newWord)
+                        TextField(L("exceptions.add_word_placeholder"), text: $newWord)
                             .textFieldStyle(.plain)
                             .font(.system(size: 13))
                             .onSubmit { addWord() }
@@ -30,7 +29,7 @@ struct ExceptionsTabView: View {
                             Button {
                                 addWord()
                             } label: {
-                                Text("Add")
+                                Text(L("exceptions.add"))
                                     .font(.system(size: 12, weight: .medium))
                                     .foregroundColor(.accentColor)
                             }
@@ -69,8 +68,8 @@ struct ExceptionsTabView: View {
                     .padding(.top, 8)
                 }
 
-                SectionLabel(title: "Excluded Apps")
-                Text("LinguaSwitch is fully disabled in these applications.")
+                SectionLabel(title: L("exceptions.excluded_apps"))
+                Text(L("exceptions.excluded_apps_sub"))
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
                     .padding(.bottom, 8)
@@ -81,7 +80,7 @@ struct ExceptionsTabView: View {
                             Image(systemName: "app.dashed")
                                 .foregroundColor(.secondary)
                                 .frame(width: DS.iconSize)
-                            Text("No excluded apps")
+                            Text(L("exceptions.no_excluded_apps"))
                                 .font(.system(size: 13))
                                 .foregroundColor(.secondary)
                             Spacer()
@@ -126,7 +125,7 @@ struct ExceptionsTabView: View {
                 Button {
                     pickApp()
                 } label: {
-                    Label("Add App…", systemImage: "plus")
+                    Label(L("exceptions.add_app"), systemImage: "plus")
                         .font(.system(size: 13))
                 }
                 .buttonStyle(.plain)

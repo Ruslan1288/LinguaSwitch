@@ -7,14 +7,14 @@ struct GeneralTabView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                PageTitle(title: "General")
+                PageTitle(title: L("general.title"))
 
-                SectionLabel(title: "Startup")
+                SectionLabel(title: L("general.startup"))
                 PrefsGroupBox {
                     PrefsToggleRow(
                         icon: "sunrise.fill", iconColor: .orange,
-                        title: "Launch at Login",
-                        subtitle: "Start LinguaSwitch automatically on login",
+                        title: L("general.launch_at_login"),
+                        subtitle: L("general.launch_at_login_sub"),
                         isOn: $settings.launchAtLogin
                     )
                     .onChange(of: settings.launchAtLogin) { val in
@@ -24,78 +24,78 @@ struct GeneralTabView: View {
                     InsetDivider()
                     PrefsToggleRow(
                         icon: "menubar.rectangle", iconColor: .blue,
-                        title: "Show in Menu Bar",
+                        title: L("general.show_in_menu_bar"),
                         isOn: $settings.showInMenuBar
                     )
                 }
 
-                SectionLabel(title: "Floating Indicator")
+                SectionLabel(title: L("general.floating_indicator"))
                 PrefsGroupBox {
                     PrefsToggleRow(
                         icon: "bubble.left.fill", iconColor: .purple,
-                        title: "Show Floating Indicator",
-                        subtitle: "Displays current layout near the cursor",
+                        title: L("general.show_floating_indicator"),
+                        subtitle: L("general.show_floating_indicator_sub"),
                         isOn: $settings.showFloatingIndicator
                     )
                     InsetDivider()
                     PrefsSliderRow(
                         icon: "timer", iconColor: Color(red: 0.5, green: 0.5, blue: 0.9),
-                        title: "Auto-hide Delay",
+                        title: L("general.autohide_delay"),
                         value: $settings.autoHideIndicatorDelay,
                         range: 0.5...5.0, step: 0.5, unit: "s"
                     )
                     InsetDivider()
                     PrefsToggleRow(
                         icon: "paintpalette.fill", iconColor: .red,
-                        title: "Highlight Typos",
-                        subtitle: "Changes indicator color when a typo is detected",
+                        title: L("general.highlight_typos"),
+                        subtitle: L("general.highlight_typos_sub"),
                         isOn: $settings.changeIndicatorColorOnTypo
                     )
                 }
 
-                SectionLabel(title: "Auto-Switch")
+                SectionLabel(title: L("general.autoswitch"))
                 PrefsGroupBox {
                     PrefsToggleRow(
                         icon: "arrow.left.arrow.right", iconColor: Color(red: 0.2, green: 0.78, blue: 0.55),
-                        title: "Auto-Switch Enabled",
-                        subtitle: "Automatically detects and converts mistyped words",
+                        title: L("general.autoswitch_enabled"),
+                        subtitle: L("general.autoswitch_enabled_sub"),
                         isOn: $settings.autoSwitchEnabled
                     )
                     InsetDivider()
                     PrefsToggleRow(
                         icon: "textformat", iconColor: Color(red: 0.9, green: 0.5, blue: 0.2),
-                        title: "Fix Double Caps",
-                        subtitle: "THis → This",
+                        title: L("general.fix_double_caps"),
+                        subtitle: L("general.fix_double_caps_sub"),
                         isOn: $settings.fixDoubleCaps
                     )
                     InsetDivider()
                     PrefsToggleRow(
                         icon: "capslock.fill", iconColor: Color(red: 0.6, green: 0.4, blue: 0.9),
-                        title: "Watch CapsLock",
+                        title: L("general.watch_capslock"),
                         isOn: $settings.watchCapsLock
                     )
                     InsetDivider()
                     PrefsToggleRow(
                         icon: "rectangle.topthird.inset.filled", iconColor: .gray,
-                        title: "Show Layout in Status Bar",
+                        title: L("general.show_layout_in_statusbar"),
                         isOn: $settings.showLayoutInStatusBar
                     )
                 }
 
-                SectionLabel(title: "Backup & Restore")
+                SectionLabel(title: L("general.backup_restore"))
                 PrefsGroupBox {
                     PrefsButtonRow(
                         icon: "square.and.arrow.up", iconColor: .blue,
-                        title: "Export Settings",
-                        subtitle: "Save all settings and auto-replace rules to a JSON file"
+                        title: L("general.export_settings"),
+                        subtitle: L("general.export_settings_sub")
                     ) {
                         AppSettings.shared.showExportPanel()
                     }
                     InsetDivider()
                     PrefsButtonRow(
                         icon: "square.and.arrow.down", iconColor: Color(red: 0.2, green: 0.7, blue: 0.4),
-                        title: "Import Settings",
-                        subtitle: "Restore settings from a previously exported JSON file"
+                        title: L("general.import_settings"),
+                        subtitle: L("general.import_settings_sub")
                     ) {
                         AppSettings.shared.showImportPanel()
                     }

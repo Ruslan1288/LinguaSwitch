@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "LayoutSwitcher",
+    defaultLocalization: "en",
     platforms: [
         .macOS(.v13)
     ],

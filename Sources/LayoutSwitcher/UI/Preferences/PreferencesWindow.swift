@@ -9,13 +9,13 @@ enum PrefsSection: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .general:      return "General"
-        case .hotkeys:      return "Hot Keys"
-        case .exceptions:   return "Exceptions"
-        case .sounds:       return "Sounds"
-        case .stats:        return "Statistics"
-        case .dictionaries: return "Dictionaries"
-        case .about:        return "About"
+        case .general:      return L("sidebar.general")
+        case .hotkeys:      return L("sidebar.hotkeys")
+        case .exceptions:   return L("sidebar.exceptions")
+        case .sounds:       return L("sidebar.sounds")
+        case .stats:        return L("sidebar.stats")
+        case .dictionaries: return L("sidebar.dictionaries")
+        case .about:        return L("sidebar.about")
         }
     }
 

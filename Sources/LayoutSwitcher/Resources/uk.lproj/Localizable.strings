@@ -1,0 +1,88 @@
+/* Menu Bar */
+"menu.monitoring_inactive_retry" = "⚠️ Моніторинг неактивний — натисніть для повторної спроби";
+"menu.grant_accessibility" = "⚠️ Надайте дозвіл Accessibility для активації";
+"menu.auto_switch" = "Авто-перемикання";
+"menu.sound_effects" = "Звукові ефекти";
+"menu.preferences" = "Налаштування...";
+"menu.quit" = "Вийти";
+
+/* Sidebar */
+"sidebar.general" = "Загальне";
+"sidebar.hotkeys" = "Гарячі клавіші";
+"sidebar.exceptions" = "Виключення";
+"sidebar.sounds" = "Звуки";
+"sidebar.stats" = "Статистика";
+"sidebar.dictionaries" = "Словники";
+"sidebar.about" = "Про програму";
+
+/* General Tab */
+"general.title" = "Загальне";
+"general.startup" = "Запуск";
+"general.launch_at_login" = "Запускати при вході";
+"general.launch_at_login_sub" = "Запускати LinguaSwitch автоматично при вході в систему";
+"general.show_in_menu_bar" = "Показувати в рядку меню";
+"general.floating_indicator" = "Плаваючий індикатор";
+"general.show_floating_indicator" = "Показувати плаваючий індикатор";
+"general.show_floating_indicator_sub" = "Показує поточну розкладку біля курсора";
+"general.autohide_delay" = "Затримка приховування";
+"general.highlight_typos" = "Підсвічувати помилки";
+"general.highlight_typos_sub" = "Змінює колір індикатора при виявленні помилки";
+"general.autoswitch" = "Авто-перемикання";
+"general.autoswitch_enabled" = "Авто-перемикання увімкнено";
+"general.autoswitch_enabled_sub" = "Автоматично визначає та конвертує помилково набрані слова";
+"general.fix_double_caps" = "Виправляти подвійний Caps";
+"general.fix_double_caps_sub" = "THis → This";
+"general.watch_capslock" = "Стежити за CapsLock";
+"general.show_layout_in_statusbar" = "Показувати розкладку в рядку стану";
+"general.backup_restore" = "Резервна копія та відновлення";
+"general.export_settings" = "Експорт налаштувань";
+"general.export_settings_sub" = "Зберегти всі налаштування та правила автозаміни у JSON файл";
+"general.import_settings" = "Імпорт налаштувань";
+"general.import_settings_sub" = "Відновити налаштування з раніше експортованого JSON файлу";
+
+/* Hot Keys Tab */
+"hotkeys.title" = "Гарячі клавіші";
+"hotkeys.default_shortcuts" = "Стандартні скорочення";
+"hotkeys.switch_layout" = "Перемкнути розкладку";
+"hotkeys.convert_last_word" = "Конвертувати останнє слово";
+"hotkeys.convert_selected" = "Конвертувати виділений текст";
+"hotkeys.cycle_case" = "Змінити регістр";
+"hotkeys.note_section" = "Примітка";
+"hotkeys.fixed_note" = "Гарячі клавіші фіксовані в цій версії. Налаштування з'явиться незабаром.";
+
+/* Exceptions Tab */
+"exceptions.title" = "Виключення";
+"exceptions.word_exceptions" = "Виключення слів";
+"exceptions.word_exceptions_sub" = "Ці слова ніколи не спричинять авто-перемикання.";
+"exceptions.add_word_placeholder" = "Додати слово…";
+"exceptions.add" = "Додати";
+"exceptions.excluded_apps" = "Виключені додатки";
+"exceptions.excluded_apps_sub" = "LinguaSwitch повністю вимкнено в цих додатках.";
+"exceptions.no_excluded_apps" = "Немає виключених додатків";
+"exceptions.add_app" = "Додати додаток…";
+
+/* Dictionaries Tab */
+"dict.title" = "Словники";
+"dict.english" = "Англійська";
+"dict.ukrainian" = "Українська";
+"dict.bundled_note" = "Словник вбудований у додаток та завантажується в SQLite при першому запуску.";
+"dict.rebuild" = "Перебудувати словник";
+"dict.rebuilding" = "Перебудова…";
+
+/* About Tab */
+"about.built_with" = "Створено на Swift та SwiftUI";
+"about.label_autoswitch" = "Авто-перемикання";
+"about.value_autoswitch" = "Визначення розкладки EN ↔ UA";
+"about.label_engine" = "Рушій";
+"about.value_engine" = "N-gram + Словник (SQLite)";
+"about.label_platform" = "Платформа";
+"about.value_platform" = "macOS 13+";
+
+/* Alerts */
+"alert.accessibility_title" = "Потрібен дозвіл Accessibility";
+"alert.accessibility_body" = "LinguaSwitch потребує доступу Accessibility для моніторингу та перемикання розкладок клавіатури. Будь ласка, надайте дозвіл у Системних налаштуваннях → Конфіденційність і безпека → Accessibility.";
+"alert.open_accessibility" = "Відкрити налаштування Accessibility";
+"alert.later" = "Пізніше";
+"alert.restart_title" = "Потрібен перезапуск";
+"alert.restart_body" = "Дозвіл Accessibility надано. LinguaSwitch потрібно перезапустити для активації моніторингу клавіатури.";
+"alert.restart_now" = "Перезапустити зараз";

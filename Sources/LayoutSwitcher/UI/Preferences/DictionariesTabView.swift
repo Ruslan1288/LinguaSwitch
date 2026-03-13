@@ -7,18 +7,18 @@ struct DictionariesTabView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Dictionaries")
+            Text(L("dict.title"))
                 .font(.headline)
 
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("English").font(.subheadline).foregroundColor(.secondary)
+                    Text(L("dict.english")).font(.subheadline).foregroundColor(.secondary)
                     Text("\(enCount) words")
                         .font(.system(.body, design: .monospaced))
                 }
                 Spacer()
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Ukrainian").font(.subheadline).foregroundColor(.secondary)
+                    Text(L("dict.ukrainian")).font(.subheadline).foregroundColor(.secondary)
                     Text("\(ukCount) words")
                         .font(.system(.body, design: .monospaced))
                 }
@@ -30,7 +30,7 @@ struct DictionariesTabView: View {
 
             Divider()
 
-            Text("The dictionary is bundled with the app and loaded into SQLite on first launch.")
+            Text(L("dict.bundled_note"))
                 .font(.caption)
                 .foregroundColor(.secondary)
 
@@ -40,10 +40,10 @@ struct DictionariesTabView: View {
                 if isRebuilding {
                     HStack(spacing: 6) {
                         ProgressView().controlSize(.small)
-                        Text("Rebuilding…")
+                        Text(L("dict.rebuilding"))
                     }
                 } else {
-                    Label("Rebuild Dictionary", systemImage: "arrow.clockwise")
+                    Label(L("dict.rebuild"), systemImage: "arrow.clockwise")
                 }
             }
             .disabled(isRebuilding)

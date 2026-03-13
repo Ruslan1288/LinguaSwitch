@@ -1,0 +1,88 @@
+/* Menu Bar */
+"menu.monitoring_inactive_retry" = "⚠️ Monitoring inactive — click to retry";
+"menu.grant_accessibility" = "⚠️ Grant Accessibility permission to activate";
+"menu.auto_switch" = "Auto-Switch";
+"menu.sound_effects" = "Sound Effects";
+"menu.preferences" = "Preferences...";
+"menu.quit" = "Quit";
+
+/* Sidebar */
+"sidebar.general" = "General";
+"sidebar.hotkeys" = "Hot Keys";
+"sidebar.exceptions" = "Exceptions";
+"sidebar.sounds" = "Sounds";
+"sidebar.stats" = "Statistics";
+"sidebar.dictionaries" = "Dictionaries";
+"sidebar.about" = "About";
+
+/* General Tab */
+"general.title" = "General";
+"general.startup" = "Startup";
+"general.launch_at_login" = "Launch at Login";
+"general.launch_at_login_sub" = "Start LinguaSwitch automatically on login";
+"general.show_in_menu_bar" = "Show in Menu Bar";
+"general.floating_indicator" = "Floating Indicator";
+"general.show_floating_indicator" = "Show Floating Indicator";
+"general.show_floating_indicator_sub" = "Displays current layout near the cursor";
+"general.autohide_delay" = "Auto-hide Delay";
+"general.highlight_typos" = "Highlight Typos";
+"general.highlight_typos_sub" = "Changes indicator color when a typo is detected";
+"general.autoswitch" = "Auto-Switch";
+"general.autoswitch_enabled" = "Auto-Switch Enabled";
+"general.autoswitch_enabled_sub" = "Automatically detects and converts mistyped words";
+"general.fix_double_caps" = "Fix Double Caps";
+"general.fix_double_caps_sub" = "THis → This";
+"general.watch_capslock" = "Watch CapsLock";
+"general.show_layout_in_statusbar" = "Show Layout in Status Bar";
+"general.backup_restore" = "Backup & Restore";
+"general.export_settings" = "Export Settings";
+"general.export_settings_sub" = "Save all settings and auto-replace rules to a JSON file";
+"general.import_settings" = "Import Settings";
+"general.import_settings_sub" = "Restore settings from a previously exported JSON file";
+
+/* Hot Keys Tab */
+"hotkeys.title" = "Hot Keys";
+"hotkeys.default_shortcuts" = "Default Shortcuts";
+"hotkeys.switch_layout" = "Switch Layout";
+"hotkeys.convert_last_word" = "Convert Last Word";
+"hotkeys.convert_selected" = "Convert Selected Text";
+"hotkeys.cycle_case" = "Cycle Case";
+"hotkeys.note_section" = "Note";
+"hotkeys.fixed_note" = "Hotkeys are fixed in this version. Custom bindings coming soon.";
+
+/* Exceptions Tab */
+"exceptions.title" = "Exceptions";
+"exceptions.word_exceptions" = "Word Exceptions";
+"exceptions.word_exceptions_sub" = "These words will never trigger auto-switching.";
+"exceptions.add_word_placeholder" = "Add word…";
+"exceptions.add" = "Add";
+"exceptions.excluded_apps" = "Excluded Apps";
+"exceptions.excluded_apps_sub" = "LinguaSwitch is fully disabled in these applications.";
+"exceptions.no_excluded_apps" = "No excluded apps";
+"exceptions.add_app" = "Add App…";
+
+/* Dictionaries Tab */
+"dict.title" = "Dictionaries";
+"dict.english" = "English";
+"dict.ukrainian" = "Ukrainian";
+"dict.bundled_note" = "The dictionary is bundled with the app and loaded into SQLite on first launch.";
+"dict.rebuild" = "Rebuild Dictionary";
+"dict.rebuilding" = "Rebuilding…";
+
+/* About Tab */
+"about.built_with" = "Built with Swift & SwiftUI";
+"about.label_autoswitch" = "Auto-switch";
+"about.value_autoswitch" = "EN ↔ UA layout detection";
+"about.label_engine" = "Engine";
+"about.value_engine" = "N-gram + Dictionary (SQLite)";
+"about.label_platform" = "Platform";
+"about.value_platform" = "macOS 13+";
+
+/* Alerts */
+"alert.accessibility_title" = "Accessibility Permission Required";
+"alert.accessibility_body" = "LinguaSwitch needs Accessibility access to monitor and switch keyboard layouts system-wide. Please grant permission in System Settings → Privacy & Security → Accessibility.";
+"alert.open_accessibility" = "Open Accessibility Settings";
+"alert.later" = "Later";
+"alert.restart_title" = "Restart Required";
+"alert.restart_body" = "Accessibility permission was granted. LinguaSwitch needs to restart to activate keyboard monitoring.";
+"alert.restart_now" = "Restart Now";

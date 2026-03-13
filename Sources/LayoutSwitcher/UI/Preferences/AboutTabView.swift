@@ -25,15 +25,15 @@ struct AboutTabView: View {
             Divider().frame(width: 240)
 
             VStack(spacing: 6) {
-                infoRow(label: "Auto-switch", value: "EN ↔ UA layout detection")
-                infoRow(label: "Engine", value: "N-gram + Dictionary (SQLite)")
-                infoRow(label: "Platform", value: "macOS 13+")
+                infoRow(label: L("about.label_autoswitch"), value: L("about.value_autoswitch"))
+                infoRow(label: L("about.label_engine"),     value: L("about.value_engine"))
+                infoRow(label: L("about.label_platform"),   value: L("about.value_platform"))
             }
             .font(.callout)
 
             Spacer()
 
-            Text("Built with Swift & SwiftUI")
+            Text(L("about.built_with"))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

@@ -1,19 +1,21 @@
 import SwiftUI
 
 struct HotKeysTabView: View {
-    private let actions: [(String, String, [String])] = [
-        ("arrow.left.arrow.right",   "Switch Layout",             ["⌥", "Space"]),
-        ("character.cursor.ibeam",   "Convert Last Word",         ["⌥", "Z"]),
-        ("selection.pin.in.out",     "Convert Selected Text",     ["⌥", "⇧", "Space"]),
-        ("textformat.abc",           "Cycle Case",                ["⌥", "⇧", "C"]),
-    ]
+    private var actions: [(String, String, [String])] {
+        [
+            ("arrow.left.arrow.right",   L("hotkeys.switch_layout"),     ["⌥", "Space"]),
+            ("character.cursor.ibeam",   L("hotkeys.convert_last_word"), ["⌥", "Z"]),
+            ("selection.pin.in.out",     L("hotkeys.convert_selected"),  ["⌥", "⇧", "Space"]),
+            ("textformat.abc",           L("hotkeys.cycle_case"),        ["⌥", "⇧", "C"]),
+        ]
+    }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                PageTitle(title: "Hot Keys")
+                PageTitle(title: L("hotkeys.title"))
 
-                SectionLabel(title: "Default Shortcuts")
+                SectionLabel(title: L("hotkeys.default_shortcuts"))
                 PrefsGroupBox {
                     ForEach(Array(actions.enumerated()), id: \.offset) { idx, action in
                         HotKeyRow(icon: action.0, title: action.1, keys: action.2)
@@ -21,13 +23,13 @@ struct HotKeysTabView: View {
                     }
                 }
 
-                SectionLabel(title: "About")
+                SectionLabel(title: L("hotkeys.note_section"))
                 PrefsGroupBox {
                     HStack(spacing: 12) {
                         Image(systemName: "lock.fill")
                             .foregroundColor(.secondary)
                             .frame(width: DS.iconSize)
-                        Text("Hotkeys are fixed in this version. Custom bindings coming soon.")
+                        Text(L("hotkeys.fixed_note"))
                             .font(.system(size: 12))
                             .foregroundColor(.secondary)
                         Spacer()
