@@ -26,6 +26,9 @@ cp "$BUILD_DIR/$BINARY_NAME" "$CONTENTS/MacOS/$APP_NAME"
 # Info.plist
 cp "Info.plist" "$CONTENTS/Info.plist"
 
+# App icon
+cp "Sources/LayoutSwitcher/Resources/AppIcon.icns" "$CONTENTS/Resources/AppIcon.icns"
+
 # Resource bundles — Bundle.module looks at Bundle.main.bundleURL (= .app root)
 cp -r "$BUILD_DIR/LayoutSwitcher_LayoutSwitcher.bundle" "$APP_BUNDLE/"
 cp -r "$BUILD_DIR/GRDB_GRDB.bundle" "$APP_BUNDLE/"
