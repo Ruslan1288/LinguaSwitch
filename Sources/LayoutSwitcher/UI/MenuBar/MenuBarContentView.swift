@@ -42,6 +42,10 @@ struct MenuBarContentView: View {
         }
         .keyboardShortcut(",", modifiers: .command)
 
+        Button(L("menu.copy_diagnostics")) {
+            DiagnosticsHelper.showReportAlert(eventMonitor: AppDelegate.shared?.eventMonitor)
+        }
+
         Button(L("menu.quit")) {
             NSApp.terminate(nil)
         }

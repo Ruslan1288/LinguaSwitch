@@ -13,7 +13,7 @@ class EventMonitor {
     /// Published so MenuBar can show active/inactive indicator
     private(set) var isActive = false
     /// Set to true when the first real keyDown arrives — proves tap is actually receiving events.
-    private var firstEventReceived = false
+    private(set) var eventsReceived = false
     private var heartbeatTimer: Timer?
 
     var onWord: ((String, Int64) -> Void)?
@@ -33,8 +33,9 @@ class EventMonitor {
                 (1 << CGEventType.keyUp.rawValue) |
                 (1 << CGEventType.tapDisabledByTimeout.rawValue) |
                 (1 << CGEventType.tapDisabledByUserInput.rawValue)
+                DiagnosticsHelper.log("EventMonitor.start — AX=\(AXIsProcessTrusted()) IM=\(CGPreflightListenEventAccess()) POST=\(CGPreflightPostEventAccess())")
             guard CGPreflightListenEventAccess() else {
-                print("[LinguaSwitch] Input Monitoring not granted")
+                DiagnosticsHelper.log("tapCreate skipped — CGPreflightListenEventAccess() = false")
                 DispatchQueue.main.async {
                     self.isActive = false
                     NotificationCenter.default.post(name: .eventTapStatusChanged, object: false)
@@ -50,13 +51,14 @@ class EventMonitor {
                 callback: eventTapCallback,
                 userInfo: selfPtr
             ) else {
-                print("[LinguaSwitch] Failed to create CGEventTap — accessibility permission required")
+                DiagnosticsHelper.log("tapCreate FAILED — AX=\(AXIsProcessTrusted()) IM=\(CGPreflightListenEventAccess())")
                 DispatchQueue.main.async {
                     self.isActive = false
                     NotificationCenter.default.post(name: .eventTapStatusChanged, object: false)
                 }
                 return
             }
+            DiagnosticsHelper.log("tapCreate OK — tap=\(tap)")
             self.eventTap = tap
             self.runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
             self.tapRunLoop = CFRunLoopGetCurrent()
@@ -84,8 +86,8 @@ class EventMonitor {
     /// not granted on macOS 15+). Mark inactive so the menu bar shows the warning.
     private func scheduleHeartbeat() {
         heartbeatTimer = Timer.scheduledTimer(withTimeInterval: 8.0, repeats: false) { [weak self] _ in
-            guard let self, self.isActive, !self.firstEventReceived else { return }
-            print("[LinguaSwitch] Heartbeat: tap active but no events received — Input Monitoring likely blocked")
+            guard let self, self.isActive, !self.eventsReceived else { return }
+            DiagnosticsHelper.log("Heartbeat FAIL: tap active but no events received — Input Monitoring likely blocked")
             self.isActive = false
             NotificationCenter.default.post(name: .eventTapStatusChanged, object: false)
         }
@@ -98,8 +100,8 @@ class EventMonitor {
     }
 
     func processKeyDown(event: CGEvent) -> Unmanaged<CGEvent>? {
-        if !firstEventReceived {
-            firstEventReceived = true
+        if !eventsReceived {
+            eventsReceived = true
             heartbeatTimer?.invalidate()
             heartbeatTimer = nil
         }

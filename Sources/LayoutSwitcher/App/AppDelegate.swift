@@ -19,9 +19,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AccessibilityHelper.requestInputMonitoring()
         AccessibilityHelper.requestPostEvent()
 
+        DiagnosticsHelper.log("Launch — AX=\(AccessibilityHelper.isAccessibilityGranted()) IM=\(AccessibilityHelper.isInputMonitoringGranted()) POST=\(AccessibilityHelper.isPostEventGranted()) macOS=\(ProcessInfo.processInfo.operatingSystemVersionString)")
+
         if AccessibilityHelper.isAccessibilityGranted() {
             startCoreServices()
         } else {
+            DiagnosticsHelper.log("Accessibility not granted — showing onboarding")
             AccessibilityHelper.requestAccessibility()
             showPermissionsOnboarding()
             startPermissionsPolling()

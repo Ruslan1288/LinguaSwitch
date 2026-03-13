@@ -2,6 +2,7 @@
 "menu.monitoring_inactive_retry" = "⚠️ Monitoring inactive — click to retry";
 "menu.grant_accessibility" = "⚠️ Grant Accessibility permission to activate";
 "menu.grant_input_monitoring" = "⚠️ Grant Input Monitoring permission to activate";
+"menu.copy_diagnostics" = "Copy Diagnostics to Clipboard";
 "menu.auto_switch" = "Auto-Switch";
 "menu.sound_effects" = "Sound Effects";
 "menu.preferences" = "Preferences...";

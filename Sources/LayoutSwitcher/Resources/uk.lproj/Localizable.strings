@@ -2,6 +2,7 @@
 "menu.monitoring_inactive_retry" = "⚠️ Моніторинг неактивний — натисніть для повторної спроби";
 "menu.grant_accessibility" = "⚠️ Надайте дозвіл Accessibility для активації";
 "menu.grant_input_monitoring" = "⚠️ Надайте дозвіл Input Monitoring для активації";
+"menu.copy_diagnostics" = "Скопіювати діагностику";
 "menu.auto_switch" = "Авто-перемикання";
 "menu.sound_effects" = "Звукові ефекти";
 "menu.preferences" = "Налаштування...";
