@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import AppKit
 
 class AppSettings: ObservableObject {
     static let shared = AppSettings()
@@ -63,6 +64,94 @@ class AppSettings: ObservableObject {
         }
     }
 }
+
+// MARK: - Settings Backup
+
+struct SettingsBackup: Codable {
+    struct ExcludedAppInfo: Codable {
+        let bundleID: String
+        let name: String
+    }
+
+    let version: Int
+    var launchAtLogin: Bool
+    var showFloatingIndicator: Bool
+    var autoHideIndicatorDelay: Double
+    var changeIndicatorColorOnTypo: Bool
+    var autoSwitchEnabled: Bool
+    var switchOnDoubleSpaceComma: Bool
+    var fixDoubleCaps: Bool
+    var watchCapsLock: Bool
+    var showLayoutInStatusBar: Bool
+    var soundEnabled: Bool
+    var excludedApps: [ExcludedAppInfo]
+    var autoReplaceEntries: [AutoReplaceEntry]
+}
+
+extension AppSettings {
+    func exportToJSON() -> Data? {
+        let backup = SettingsBackup(
+            version: 1,
+            launchAtLogin: launchAtLogin,
+            showFloatingIndicator: showFloatingIndicator,
+            autoHideIndicatorDelay: autoHideIndicatorDelay,
+            changeIndicatorColorOnTypo: changeIndicatorColorOnTypo,
+            autoSwitchEnabled: autoSwitchEnabled,
+            switchOnDoubleSpaceComma: switchOnDoubleSpaceComma,
+            fixDoubleCaps: fixDoubleCaps,
+            watchCapsLock: watchCapsLock,
+            showLayoutInStatusBar: showLayoutInStatusBar,
+            soundEnabled: soundEnabled,
+            excludedApps: excludedApps.map { .init(bundleID: $0.bundleID, name: $0.name) },
+            autoReplaceEntries: AutoReplaceManager.shared.entries
+        )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        return try? encoder.encode(backup)
+    }
+
+    func importFromJSON(_ data: Data) throws {
+        let backup = try JSONDecoder().decode(SettingsBackup.self, from: data)
+        launchAtLogin           = backup.launchAtLogin
+        showFloatingIndicator   = backup.showFloatingIndicator
+        autoHideIndicatorDelay  = backup.autoHideIndicatorDelay
+        changeIndicatorColorOnTypo = backup.changeIndicatorColorOnTypo
+        autoSwitchEnabled       = backup.autoSwitchEnabled
+        switchOnDoubleSpaceComma = backup.switchOnDoubleSpaceComma
+        fixDoubleCaps           = backup.fixDoubleCaps
+        watchCapsLock           = backup.watchCapsLock
+        showLayoutInStatusBar   = backup.showLayoutInStatusBar
+        soundEnabled            = backup.soundEnabled
+        excludedApps = backup.excludedApps.map {
+            ExcludedApp(bundleID: $0.bundleID, name: $0.name)
+        }
+        AutoReplaceManager.shared.entries = backup.autoReplaceEntries
+    }
+
+    func showExportPanel() {
+        guard let data = exportToJSON() else { return }
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "LinguaSwitch-settings.json"
+        panel.allowedContentTypes = [.json]
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            try? data.write(to: url)
+        }
+    }
+
+    func showImportPanel() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.json]
+        panel.allowsMultipleSelection = false
+        panel.begin { response in
+            guard response == .OK, let url = panel.url,
+                  let data = try? Data(contentsOf: url) else { return }
+            try? self.importFromJSON(data)
+        }
+    }
+}
+
+// MARK: - ExcludedApp
 
 struct ExcludedApp: Codable, Identifiable {
     let id: UUID

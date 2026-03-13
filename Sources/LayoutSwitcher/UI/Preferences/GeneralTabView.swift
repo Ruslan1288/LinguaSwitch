@@ -82,6 +82,25 @@ struct GeneralTabView: View {
                     )
                 }
 
+                SectionLabel(title: "Backup & Restore")
+                PrefsGroupBox {
+                    PrefsButtonRow(
+                        icon: "square.and.arrow.up", iconColor: .blue,
+                        title: "Export Settings",
+                        subtitle: "Save all settings and auto-replace rules to a JSON file"
+                    ) {
+                        AppSettings.shared.showExportPanel()
+                    }
+                    InsetDivider()
+                    PrefsButtonRow(
+                        icon: "square.and.arrow.down", iconColor: Color(red: 0.2, green: 0.7, blue: 0.4),
+                        title: "Import Settings",
+                        subtitle: "Restore settings from a previously exported JSON file"
+                    ) {
+                        AppSettings.shared.showImportPanel()
+                    }
+                }
+
                 Spacer(minLength: 20)
             }
             .padding(20)

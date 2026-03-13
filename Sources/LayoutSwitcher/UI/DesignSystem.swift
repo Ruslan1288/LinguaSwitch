@@ -132,6 +132,38 @@ struct PrefsSliderRow: View {
     }
 }
 
+// MARK: - PrefsButtonRow
+
+struct PrefsButtonRow: View {
+    let icon: String
+    let iconColor: Color
+    let title: String
+    var subtitle: String? = nil
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                IconBadge(systemName: icon, color: iconColor)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(title).font(.system(size: 13)).foregroundColor(.primary)
+                    if let sub = subtitle {
+                        Text(sub).font(.system(size: 11)).foregroundColor(.secondary)
+                    }
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(.secondary)
+            }
+            .padding(.horizontal, DS.rowPadH)
+            .padding(.vertical, DS.rowPadV)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 // MARK: - InsetDivider
 
 struct InsetDivider: View {
